@@ -433,6 +433,8 @@ public class RegistrationView extends javax.swing.JFrame {
             
             String fmName=txtfmName.getText();
             String contact=txtcontact.getText();
+            
+            //Check for gender selection
             String gender;
             if (rbtnMale.isSelected()) {
                 gender = "Male";
@@ -443,11 +445,19 @@ public class RegistrationView extends javax.swing.JFrame {
                 return;
             }
             
+            //Validate required fields
             if (student_Id==null || name==null || contact==null) {
                 JOptionPane.showMessageDialog(this, "Student ID, Name, and Contact are required.","Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
+            // Check for duplicate student
+            if (studentController.isDuplicateStudent(student_Id, name, contact)) {
+                JOptionPane.showMessageDialog(this, "Duplicate student details found. Please check the Student ID, Name, and Contact.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            //Create the StudentDto object
             StudentDto studentDto = new StudentDto(student_Id, name, address, birth, fmName, contact, gender);
             String resp = studentController.registerStudent(studentDto);
             JOptionPane.showMessageDialog(this, resp);
