@@ -4,6 +4,8 @@
  */
 package edu.bit.service;
 
+import edu.bit.service.user.impl.StudentServiceImpl;
+
 /**
  *
  * @author Administrator
@@ -24,7 +26,7 @@ public class ServiceFactory {
     public SuperService getService(ServiceType serviceType){
         switch (serviceType) {
             case STUDENTS:
-                return null;
+                return new StudentServiceImpl();
         }   
         return null;
     }
