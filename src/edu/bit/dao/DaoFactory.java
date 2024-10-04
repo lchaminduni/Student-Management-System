@@ -4,6 +4,8 @@
  */
 package edu.bit.dao;
 
+import edu.bit.dao.Impl.StudentDaoImpl;
+
 /**
  *
  * @author Administrator
@@ -25,7 +27,7 @@ public class DaoFactory {
     public SuperDao getDao(DaoTypes daoTypes){
         switch (daoTypes) {
             case STUDENT:
-                
+                return new StudentDaoImpl();  // Ensure this is correct
             default:
                 return null;
         }
