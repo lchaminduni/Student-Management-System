@@ -4,6 +4,8 @@
  */
 package edu.bit.dao;
 
+import edu.bit.dao.Impl.ClassDaoImpl;
+import edu.bit.dao.Impl.EnrollDaoImpl;
 import edu.bit.dao.Impl.StudentDaoImpl;
 
 /**
@@ -28,6 +30,12 @@ public class DaoFactory {
         switch (daoTypes) {
             case STUDENT:
                 return new StudentDaoImpl();  // Ensure this is correct
+                
+            case ENROLLMENT:
+                return new EnrollDaoImpl();
+                
+            case CLASS:
+                return new ClassDaoImpl();
             default:
                 return null;
         }
@@ -35,6 +43,6 @@ public class DaoFactory {
     }
     
     public enum DaoTypes{
-        STUDENT
+        STUDENT,ENROLLMENT,CLASS
     }
 }

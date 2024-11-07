@@ -76,7 +76,7 @@ public class StudentServiceImpl implements StudentService{
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception("An error occurred while checking if the book exists", e);
+            throw new Exception("An error occurred while checking if the student exists", e);
         }
         return true;
     }

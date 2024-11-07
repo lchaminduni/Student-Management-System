@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/entity/ClassEntity.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/view/StudentEnrollView.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/entity/StudentEntity.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/view/ClassManageView.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dto/EnrollDto.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/service/user/impl/ClassServiceImpl.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/service/user/EnrollService.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dao/DaoFactory.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/service/user/impl/EnrollServiceImpl.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dao/Interfaces/StudentDao.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/service/user/StudentService.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dao/Impl/EnrollDaoImpl.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dao/Impl/StudentDaoImpl.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dto/UserDto.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/service/SuperService.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/view/RegistrationView.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/Controller/ClassController.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/view/MainDashboardView.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/service/ServiceFactory.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/db/DBConnection.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/Main.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dao/CrudDao.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dao/Interfaces/ClassDao.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dao/Interfaces/EnrollDao.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/entity/EnrollEntity.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dao/CrudUtil.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/view/LoggingView.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/service/user/impl/StudentServiceImpl.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/Controller/EnrollController.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/Controller/StudentController.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/service/user/ClassService.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dao/SuperDao.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dto/ClassDto.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dao/Impl/ClassDaoImpl.java</file>
+            <file>file:/D:/BIT/Student%20Management%20System/src/edu/bit/dto/StudentDto.java</file>
+        </group>
+    </open-files>
+</project-private>

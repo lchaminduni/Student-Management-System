@@ -4,6 +4,8 @@
  */
 package edu.bit.service;
 
+import edu.bit.service.user.impl.ClassServiceImpl;
+import edu.bit.service.user.impl.EnrollServiceImpl;
 import edu.bit.service.user.impl.StudentServiceImpl;
 
 /**
@@ -27,8 +29,15 @@ public class ServiceFactory {
         switch (serviceType) {
             case STUDENTS:
                 return new StudentServiceImpl();
+                
+            case ENROLLMENT:
+                return new EnrollServiceImpl();
+            case CLASS:
+                return new ClassServiceImpl();
+            default:
+                return null;
         }   
-        return null;
+        
     }
     
     public enum ServiceType{

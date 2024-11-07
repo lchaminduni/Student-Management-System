@@ -134,6 +134,4 @@ public class StudentDto {
     public String toString() {
         return "StudentDto{" + "student_Id=" + student_Id + ", name=" + name + ", address=" + address + ", birth=" + birth + ", fmName=" + fmName + ", contact=" + contact + ", gender=" + gender + '}';
     }
-    
-    
 }

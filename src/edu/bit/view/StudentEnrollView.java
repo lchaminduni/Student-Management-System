@@ -4,18 +4,47 @@
  */
 package edu.bit.view;
 
+import edu.bit.Controller.EnrollController;
+import edu.bit.db.DBConnection;
+import edu.bit.dto.ClassDto;
+import edu.bit.dto.EnrollDto;
+import edu.bit.dto.StudentDto;
+import edu.bit.service.user.EnrollService;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Administrator
  */
 public class StudentEnrollView extends javax.swing.JFrame {
+    
+    private EnrollController enrollController;
+    private EnrollService enrollService;
+    private MainDashboardView mainDashboard;
 
     /**
      * Creates new form StudentEnrollView
      */
     public StudentEnrollView() {
         initComponents();
+        this.enrollController=new EnrollController();
+        loadEnrollment();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(mainDashboard);
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,17 +58,31 @@ public class StudentEnrollView extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtenrollId = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        txtstudentId = new javax.swing.JTextField();
+        txtclassId = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblstudentName = new javax.swing.JLabel();
+        lbldate = new javax.swing.JLabel();
+        lbltime = new javax.swing.JLabel();
+        lblgrade = new javax.swing.JLabel();
+        lblsubject = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        txtEnrollDate = new com.toedter.calendar.JDateChooser();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblstudentEnroll = new javax.swing.JTable();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnviewS = new javax.swing.JButton();
+        btnviewC = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(51, 255, 204));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Student Enrollment");
@@ -47,8 +90,7 @@ public class StudentEnrollView extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Student ID");
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField1.setText("jTextField1");
+        txtenrollId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Enrollment ID");
@@ -57,77 +99,218 @@ public class StudentEnrollView extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField2.setText("jTextField1");
+        txtstudentId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtstudentId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtstudentIdActionPerformed(evt);
+            }
+        });
+        txtstudentId.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtstudentIdKeyReleased(evt);
+            }
+        });
 
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField3.setText("jTextField1");
+        txtclassId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setText("Class ID");
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel7.setText("jLabel7");
+        lblstudentName.setBackground(new java.awt.Color(255, 255, 255));
+        lblstudentName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel8.setText("jLabel7");
+        lbldate.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        lbltime.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        lblgrade.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        lblsubject.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel12.setText("Date");
+
+        tblstudentEnroll.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Enrollment ID", "Student ID", "Class ID", "Date"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tblstudentEnroll.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblstudentEnrollMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblstudentEnroll);
+
+        btnAdd.setBackground(new java.awt.Color(0, 204, 51));
+        btnAdd.setText("ADD");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(0, 153, 255));
+        btnUpdate.setText("UPDATE");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(255, 51, 51));
+        btnDelete.setText("DELETE");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnviewS.setBackground(new java.awt.Color(0, 204, 204));
+        btnviewS.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnviewS.setText("View");
+        btnviewS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnviewSActionPerformed(evt);
+            }
+        });
+
+        btnviewC.setBackground(new java.awt.Color(0, 204, 204));
+        btnviewC.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnviewC.setText("View");
+        btnviewC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnviewCActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(371, 371, 371)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(371, 371, 371)
-                        .addComponent(jLabel1))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 895, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(65, 65, 65)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(43, 43, 43)
+                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addGap(26, 26, 26)
+                                .addComponent(jLabel4)))
+                        .addContainerGap(604, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(402, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel6))
+                            .addComponent(jLabel2))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(202, 202, 202)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(lblstudentName, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(lblgrade, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(29, 29, 29)
+                                                .addComponent(lblsubject, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(lbldate, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(30, 30, 30)
+                                                .addComponent(lbltime, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(txtstudentId, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnviewS))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(txtclassId, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnviewC))
+                                            .addComponent(txtEnrollDate, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(txtenrollId, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(39, 39, 39)
+                .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel3)
+                    .addComponent(txtenrollId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(21, 21, 21)
+                    .addComponent(txtstudentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblstudentName)
+                    .addComponent(btnviewS))
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel8))
-                .addGap(21, 21, 21)
-                .addComponent(jLabel5)
-                .addContainerGap(334, Short.MAX_VALUE))
+                    .addComponent(txtclassId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbldate)
+                    .addComponent(lbltime)
+                    .addComponent(lblgrade)
+                    .addComponent(lblsubject)
+                    .addComponent(btnviewC))
+                .addGap(31, 31, 31)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(53, 53, 53)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel5)
+                        .addContainerGap(12, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtEnrollDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -135,21 +318,116 @@ public class StudentEnrollView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(22, 22, 22)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addGap(21, 21, 21)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        enrollStudent();
+        
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        updateEnrollment();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        deleteEnrollment();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblstudentEnrollMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblstudentEnrollMouseClicked
+        DefaultTableModel dtm = (DefaultTableModel) tblstudentEnroll.getModel();
+    int selectedRow = tblstudentEnroll.getSelectedRow();
+
+    if (selectedRow != -1) {
+        // Retrieve the data from the selected row
+        String enrollmentId = dtm.getValueAt(selectedRow, 0).toString();
+        String studentId = dtm.getValueAt(selectedRow, 1).toString();
+        String classId = dtm.getValueAt(selectedRow, 2).toString();
+        String enrollDate = dtm.getValueAt(selectedRow, 3).toString();
+
+        // Set the values in the text fields or labels
+        txtenrollId.setText(enrollmentId);
+        txtstudentId.setText(studentId);
+        txtclassId.setText(classId);
+        
+        // Parse and set the date
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date enrollmentDate = sdf.parse(enrollDate);
+            txtEnrollDate.setDate(enrollmentDate);  // Set the parsed date into JDateChooser or JFormattedTextField
+        } catch (ParseException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error parsing date: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+        
+    }//GEN-LAST:event_tblstudentEnrollMouseClicked
+
+    private void txtstudentIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtstudentIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtstudentIdActionPerformed
+
+    private void txtstudentIdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtstudentIdKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtstudentIdKeyReleased
+
+    private void btnviewSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnviewSActionPerformed
+        // TODO add your handling code here:
+        String studentId = txtstudentId.getText().trim();
+    if (studentId.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter Student ID.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    try {
+        StudentDto studentDetails = enrollController.getStudentDetails(studentId);
+        if (studentDetails != null) {
+            lblstudentName.setText(studentDetails.getName());
+        } else {
+            JOptionPane.showMessageDialog(this, "Student not found.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error retrieving student details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnviewSActionPerformed
+
+    private void btnviewCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnviewCActionPerformed
+        // TODO add your handling code here:
+        String classId = txtclassId.getText().trim();
+    if (classId.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter Class ID.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    try {
+        ClassDto classDetails = enrollController.getClassDetails(classId);
+        if (classDetails != null) {
+            lblgrade.setText(classDetails.getGrade());
+            lblsubject.setText(classDetails.getSubject());
+            lbldate.setText(classDetails.getDate().toString());
+            lbltime.setText(classDetails.getTime());
+        } else {
+            JOptionPane.showMessageDialog(this, "Class not found.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error retrieving class details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnviewCActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,17 +465,201 @@ public class StudentEnrollView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton btnviewC;
+    private javax.swing.JButton btnviewS;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbldate;
+    private javax.swing.JLabel lblgrade;
+    private javax.swing.JLabel lblstudentName;
+    private javax.swing.JLabel lblsubject;
+    private javax.swing.JLabel lbltime;
+    private javax.swing.JTable tblstudentEnroll;
+    private com.toedter.calendar.JDateChooser txtEnrollDate;
+    private javax.swing.JTextField txtclassId;
+    private javax.swing.JTextField txtenrollId;
+    private javax.swing.JTextField txtstudentId;
     // End of variables declaration//GEN-END:variables
+    
+    
+    private void enrollStudent(){
+        try {
+            int enrollmentId=Integer.parseInt(txtenrollId.getText());
+            String studentId=txtstudentId.getText();
+           
+            String classId=txtclassId.getText();
+            Date enrollDate=txtEnrollDate.getDate();
+           
+           
+            if (enrollDate == null ) {
+                JOptionPane.showMessageDialog(this, "Please select a valid date.","Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Validate Student ID
+            if (!isStudentIdValid(studentId)) {
+                JOptionPane.showMessageDialog(this, "Student ID not match with database.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validate Class ID
+            if (!isClassIdValid(classId)) {
+                JOptionPane.showMessageDialog(this, "Class ID not match with database.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            EnrollDto enrollDto=new EnrollDto(enrollmentId, studentId, classId, enrollDate);
+            String result=enrollController.enrollStudent(enrollDto);
+            JOptionPane.showMessageDialog(this, result);
+            
+            loadEnrollment();
+            clearForm();
+          
+           
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error enrolling student: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    
+    private void updateEnrollment(){
+        try {
+        // Retrieve and trim input values
+        int enrollmentId = Integer.parseInt(txtenrollId.getText().trim());
+        String studentId = txtstudentId.getText().trim();
+        String classId = txtclassId.getText().trim();
+        Date enrollDate = txtEnrollDate.getDate();
+
+        // Check for required fields
+        if (studentId.isEmpty() || classId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Student ID and Class ID are required.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Check if the enrollment date is selected
+        if (enrollDate == null) {
+            JOptionPane.showMessageDialog(this, "Please select a valid enrollment date.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate Student ID exists in database
+        if (!isStudentIdValid(studentId)) {
+            JOptionPane.showMessageDialog(this, "Student ID does not match any records in the database.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate Class ID exists in database
+        if (!isClassIdValid(classId)) {
+            JOptionPane.showMessageDialog(this, "Class ID does not match any records in the database.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Create an EnrollDto object
+        EnrollDto enrollDto = new EnrollDto(enrollmentId, studentId, classId, enrollDate);
+
+        // Update the enrollment using EnrollController
+        String response = enrollController.updateEnroll(enrollDto);
+        
+        // Display response message
+        if (response.equals("Success")) {
+            JOptionPane.showMessageDialog(this, "Enrollment updated successfully.");
+        } else {
+            JOptionPane.showMessageDialog(this, response);
+        }
+
+        // Reload the enrollment data table and clear the form
+        loadEnrollment();
+        clearForm();
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Invalid Enrollment ID format.", "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        e.printStackTrace(); // Print full exception for debugging
+        JOptionPane.showMessageDialog(this, "Error updating enrollment: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }
+    
+    private void deleteEnrollment(){
+        try {
+           int enrollmentId=Integer.parseInt(txtenrollId.getText().trim());
+           String result=enrollController.deleteEnroll(enrollmentId);
+           JOptionPane.showMessageDialog(this, result);
+           loadEnrollment();
+           clearForm();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error deleting enrollment: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void loadEnrollment(){
+        
+        try {
+            String columns[]={"Enrollment ID","Student ID","Class ID","Date"};
+            DefaultTableModel dtm=new DefaultTableModel(columns,0){
+                    @Override
+                    public boolean isCellEditable(int row,int column){
+                    return false;
+                    }
+            };
+            tblstudentEnroll.setModel(dtm);
+            
+            ArrayList<EnrollDto> enrolledList=enrollController.getAllEnrollments();
+            
+            if(enrolledList==null){
+                enrolledList=new ArrayList<>();
+            }
+            
+            for(EnrollDto enrollment:enrolledList){
+                Object[] rowData={
+                   enrollment.getEnrollmentId(),
+                   enrollment.getStudentId(),
+                   enrollment.getClassId(),
+                   enrollment.getEnrollDate()
+                };
+                dtm.addRow(rowData);
+            }
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading enrollment data: "+e.getMessage());
+        }
+    }
+    
+    private void clearForm(){
+        txtenrollId.setText("");
+        txtstudentId.setText("");
+        txtclassId.setText("");
+        txtEnrollDate.setDate(null);    
+    }
+
+    private boolean isStudentIdValid(String studentId) {
+        try {
+            return enrollController.isStudentExists(studentId);  // Implement this in EnrollController
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    private boolean isClassIdValid(String classId) {
+        try {
+            return enrollController.isClassExists(classId);  // Implement this in EnrollController
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    
 }

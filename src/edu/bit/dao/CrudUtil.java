@@ -39,4 +39,5 @@ public class CrudUtil {
     public static ResultSet executeQuery(String sql,Object... args) throws Exception{
         return getPreparedStatement(sql, args).executeQuery();
     }
+
 }

@@ -5,6 +5,7 @@
 package edu.bit.dao.Interfaces;
 
 import edu.bit.dao.CrudDao;
+import edu.bit.dto.StudentDto;
 import edu.bit.entity.StudentEntity;
 
 /**
@@ -12,5 +13,7 @@ import edu.bit.entity.StudentEntity;
  * @author Administrator
  */
 public interface StudentDao extends CrudDao<StudentEntity, String>{
+
+    public StudentDto getStudentDetails(String studentId) throws Exception;
     
 }

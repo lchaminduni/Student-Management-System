@@ -6,6 +6,7 @@ package edu.bit.dao.Impl;
 
 import edu.bit.dao.CrudUtil;
 import edu.bit.dao.Interfaces.StudentDao;
+import edu.bit.dto.StudentDto;
 import edu.bit.entity.StudentEntity;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -52,6 +53,22 @@ public class StudentDaoImpl implements StudentDao{
             studentEntities.add(studentEntity);
         }
         return studentEntities;
+    }
+
+    @Override
+    public StudentDto getStudentDetails(String studentId) throws Exception{
+        StudentEntity studentEntity = get(studentId);
+        if (studentEntity != null) {
+            return new StudentDto(
+                    studentEntity.getStudent_Id(),
+                    studentEntity.getName(),
+                    studentEntity.getAddress(),
+                    studentEntity.getBirth(),
+                    studentEntity.getFmName(),
+                    studentEntity.getContact(),
+                    studentEntity.getGender());
+        }
+        return null;
     }
     
 }

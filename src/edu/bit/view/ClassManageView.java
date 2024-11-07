@@ -4,17 +4,34 @@
  */
 package edu.bit.view;
 
+import edu.bit.Controller.ClassController;
+import edu.bit.dto.ClassDto;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Administrator
  */
 public class ClassManageView extends javax.swing.JFrame {
+    private ClassController classController;
+    private MainDashboardView mainDashboard;
 
     /**
      * Creates new form ClassManageView
      */
     public ClassManageView() {
         initComponents();
+        this.classController=new ClassController();
+        loadTable();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(mainDashboard);
     }
 
     /**
@@ -26,21 +43,295 @@ public class ClassManageView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txtclassId = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtgrade = new javax.swing.JTextField();
+        txtsubject = new javax.swing.JTextField();
+        txtteacherName = new javax.swing.JTextField();
+        txtsubjectFee = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txttime = new javax.swing.JTextField();
+        txtdate = new com.toedter.calendar.JDateChooser();
+        btnadd = new javax.swing.JButton();
+        btndelete = new javax.swing.JButton();
+        btnupdate = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblclassManage = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(102, 255, 204));
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setText("CLASS MANAGEMENT");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Class ID");
+
+        txtclassId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtclassId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtclassIdActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Grade");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setText("Subject");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setText("Teacher's Name");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setText("Subject Fee");
+
+        txtgrade.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        txtsubject.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        txtteacherName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        txtsubjectFee.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setText("Date");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setText("Time");
+
+        txttime.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        btnadd.setBackground(new java.awt.Color(0, 204, 102));
+        btnadd.setText("ADD");
+        btnadd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaddActionPerformed(evt);
+            }
+        });
+
+        btndelete.setBackground(new java.awt.Color(255, 51, 51));
+        btndelete.setText("DELETE");
+        btndelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndeleteActionPerformed(evt);
+            }
+        });
+
+        btnupdate.setBackground(new java.awt.Color(0, 102, 255));
+        btnupdate.setText("UPDATE");
+        btnupdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnupdateActionPerformed(evt);
+            }
+        });
+
+        tblclassManage.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Class ID", "Grade", "Subject", "Teacher", "Class Fee", "Date", "Time"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tblclassManage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblclassManageMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblclassManage);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnadd, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1022, 1022, 1022))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtdate, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                                    .addComponent(txttime))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addComponent(btnupdate, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btndelete, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtsubjectFee, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtteacherName))
+                                .addGap(66, 66, 66)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(428, 428, 428)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addGap(67, 67, 67)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtsubject, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(txtgrade)
+                            .addComponent(txtclassId))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtclassId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtgrade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtsubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtteacherName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(txtsubjectFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(44, 44, 44)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(21, 21, 21)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel8)
+                                    .addComponent(txttime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnadd, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnupdate, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btndelete, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                .addGap(87, 87, 87))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 797, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 493, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtclassIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtclassIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtclassIdActionPerformed
+
+    private void btnaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddActionPerformed
+        addClass();
+    }//GEN-LAST:event_btnaddActionPerformed
+
+    private void btnupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupdateActionPerformed
+        updateClass();
+    }//GEN-LAST:event_btnupdateActionPerformed
+
+    private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
+        deleteClass();
+    }//GEN-LAST:event_btndeleteActionPerformed
+
+    private void tblclassManageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblclassManageMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel dtm = (DefaultTableModel) tblclassManage.getModel();
+        int selectedRow = tblclassManage.getSelectedRow();
+
+        if (selectedRow != -1) {
+            // Retrieve the data from the selected row
+            String class_Id = dtm.getValueAt(selectedRow, 0).toString();
+            String grade = dtm.getValueAt(selectedRow, 1).toString();
+            String subject = dtm.getValueAt(selectedRow, 2).toString();
+            String teacherName = dtm.getValueAt(selectedRow, 3).toString();
+            String classFee=dtm.getValueAt(selectedRow,4).toString();
+            String date = dtm.getValueAt(selectedRow, 5).toString();
+            String time = dtm.getValueAt(selectedRow, 6).toString();
+
+            // Set the values in the labels or text fields
+            txtclassId.setText(class_Id);
+            txtgrade.setText(grade);
+            txtsubject.setText(subject);
+            txtteacherName.setText(teacherName);
+            txtsubjectFee.setText(classFee);
+            //txtdate.setDate(date);
+            //txttime.setText(time);
+
+            // Parse and set the date
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date classDate = sdf.parse(date);
+                //jDateChooser.setDate(classDate); // Set the parsed date into JDateChooser
+                txtdate.setDate(classDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error parsing date: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            txttime.setText(time);
+        }
+    }//GEN-LAST:event_tblclassManageMouseClicked
 
     /**
      * @param args the command line arguments
@@ -78,5 +369,173 @@ public class ClassManageView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnadd;
+    private javax.swing.JButton btndelete;
+    private javax.swing.JButton btnupdate;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblclassManage;
+    private javax.swing.JTextField txtclassId;
+    private com.toedter.calendar.JDateChooser txtdate;
+    private javax.swing.JTextField txtgrade;
+    private javax.swing.JTextField txtsubject;
+    private javax.swing.JTextField txtsubjectFee;
+    private javax.swing.JTextField txtteacherName;
+    private javax.swing.JTextField txttime;
     // End of variables declaration//GEN-END:variables
+    private void addClass() {
+        try {
+            String class_Id = txtclassId.getText();
+            String grade = txtgrade.getText();
+            String subject = txtsubject.getText();
+            String teacherName = txtteacherName.getText();
+            BigDecimal classFee = new BigDecimal(txtsubjectFee.getText());
+            Date date = txtdate.getDate();
+            String time = txttime.getText();
+
+            // Validate required fields
+            if (class_Id.isEmpty() || grade.isEmpty() || subject.isEmpty() || teacherName.isEmpty() || time.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Class ID, Grade, Subject, Teacher, and Time are required.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (date == null) {
+                JOptionPane.showMessageDialog(this, "Please select a valid date.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check for duplicate class
+            if (classController.isDuplicateClass(class_Id, subject, grade, teacherName)) {
+                JOptionPane.showMessageDialog(this, "Duplicate class ID found. Please check.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            ClassDto classDto = new ClassDto(class_Id, grade, subject, teacherName,classFee, date, time);
+            String resp = classController.addClass(classDto);
+            JOptionPane.showMessageDialog(this, resp);
+
+            loadTable();
+            clearForm();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error at adding class: " + e.getMessage());
+        }
+    }
+    
+    private void updateClass() {
+        try {
+            String class_Id = txtclassId.getText().trim();
+            String grade = txtgrade.getText().trim();
+            String subject = txtsubject.getText().trim();
+            String teacherName = txtteacherName.getText().trim();
+            BigDecimal classFee = new BigDecimal(txtsubjectFee.getText());
+            Date date = txtdate.getDate();
+            String time = txttime.getText().trim();
+
+            if (class_Id.isEmpty() || grade.isEmpty() || subject.isEmpty() || teacherName.isEmpty() || time.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Class ID, Grade, Subject, Teacher, and Time are required.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (date == null) {
+                JOptionPane.showMessageDialog(this, "Please select a valid date.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            ClassDto classDto = new ClassDto(class_Id, grade, subject, teacherName,classFee, date, time);
+            String resp = classController.updateClass(classDto);
+            JOptionPane.showMessageDialog(this, resp);
+
+            loadTable();
+            clearForm();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error at updating class: " + e.getMessage());
+        }
+    }
+    
+    private void deleteClass() {
+        try {
+            int selectedRow = tblclassManage.getSelectedRow();
+
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Please select a class to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            DefaultTableModel dtm = (DefaultTableModel) tblclassManage.getModel();
+            String classId = dtm.getValueAt(selectedRow, 0).toString();
+
+            int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this class?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+
+            if (confirmation == JOptionPane.YES_OPTION) {
+                String resp = classController.deleteClass(classId);
+                JOptionPane.showMessageDialog(this, resp);
+
+                loadTable();
+                clearForm();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error at deleting class: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    private void loadTable() {
+        try {
+            String[] columns = {"Class ID", "Grade", "Subject", "Teacher","Class Fee", "Date", "Time"};
+            DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            tblclassManage.setModel(dtm);
+
+            ArrayList<ClassDto> classList = classController.getAllClasses();
+            if (classList == null) {
+                classList = new ArrayList<>();
+            }
+
+            for (ClassDto classDto : classList) {
+                Object[] rowData = {
+                        classDto.getClass_Id(),
+                        classDto.getGrade(),
+                        classDto.getSubject(),
+                        classDto.getTeacherName(),
+                        classDto.getClassFee(),
+                        classDto.getDate(),
+                        classDto.getTime()
+                };
+                dtm.addRow(rowData);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading class data: " + e.getMessage());
+        }
+    }
+
+    private void clearForm() {
+        txtclassId.setText("");
+        txtgrade.setText("");
+        txtsubject.setText("");
+        txtteacherName.setText("");
+        txtsubjectFee.setText("");
+        txtsubjectFee.setText("");
+        txtdate.setDate(null);
+        txttime.setText("");
+    }
+
 }

@@ -29,7 +29,7 @@ public class RegistrationView extends javax.swing.JFrame {
      */
     public RegistrationView() {
         initComponents();
-        this.studentController = new StudentController(); // Initialize the studentController
+        this.studentController = new StudentController(); // Initialize the studentController 
         loadTable();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this form
         setLocationRelativeTo(mainDashboard);
