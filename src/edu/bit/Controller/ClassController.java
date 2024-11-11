@@ -11,10 +11,6 @@ import edu.bit.service.user.ClassService;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- *
- * @author Administrator
- */
 public class ClassController {
     private ArrayList<ClassDto> classDtos;
     
@@ -45,10 +41,7 @@ public class ClassController {
     }
     
     public boolean isDuplicateClass(String class_Id, String subject, String grade, String teacherName) throws Exception {
-    // This method should check the database or list of classes to see if a class
-    // with the same Class ID, Subject, Grade, or Teacher Name already exists
-    // Return true if a duplicate is found, otherwise return false.
-
+    
     ArrayList<ClassDto> classList = getAllClasses(); // Get all existing classes
     for (ClassDto classDto : classList) {
         if (classDto.getClass_Id().equals(class_Id) || 

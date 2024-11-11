@@ -43,9 +43,7 @@ public class StudentController {
     }
     
     public boolean isDuplicateStudent(String student_Id, String name, String contact) throws Exception {
-    // This method should check the database or list of students to see if a student
-    // with the same Student ID, Name, or Contact already exists
-    // Return true if a duplicate is found, otherwise return false.
+   
 
         ArrayList<StudentDto> studentList = getAllStudents(); // Get all existing students
         for (StudentDto student : studentList) {

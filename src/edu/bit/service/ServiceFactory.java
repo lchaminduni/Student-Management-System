@@ -6,6 +6,7 @@ package edu.bit.service;
 
 import edu.bit.service.user.impl.ClassServiceImpl;
 import edu.bit.service.user.impl.EnrollServiceImpl;
+import edu.bit.service.user.impl.PaymentServiceImpl;
 import edu.bit.service.user.impl.StudentServiceImpl;
 
 /**
@@ -34,6 +35,9 @@ public class ServiceFactory {
                 return new EnrollServiceImpl();
             case CLASS:
                 return new ClassServiceImpl();
+                
+            case PAYMENT:
+                return new PaymentServiceImpl();
             default:
                 return null;
         }   

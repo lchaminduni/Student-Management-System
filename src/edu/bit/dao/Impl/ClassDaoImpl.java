@@ -12,10 +12,6 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-/**
- *
- * @author Administrator
- */
 public class ClassDaoImpl implements ClassDao{
     @Override
     public boolean save(ClassEntity t) throws Exception {

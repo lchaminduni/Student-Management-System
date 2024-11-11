@@ -7,10 +7,6 @@ package edu.bit.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- *
- * @author Administrator
- */
 public class ClassDto {
     private String class_Id;
     private String grade;
@@ -20,7 +16,8 @@ public class ClassDto {
     private Date date;
     private String time;
     
-    public ClassDto(String class_Id, String grade, String subject, String teacherName, BigDecimal classFee, Date date, String time) {
+    public ClassDto(String class_Id, String grade, String subject, 
+            String teacherName, BigDecimal classFee, Date date, String time) {
         this.class_Id = class_Id;
         this.grade = grade;
         this.subject = subject;

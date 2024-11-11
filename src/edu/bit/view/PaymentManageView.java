@@ -4,17 +4,36 @@
  */
 package edu.bit.view;
 
+import edu.bit.Controller.PaymentController;
+import edu.bit.dto.ClassDto;
+import edu.bit.dto.PaymentDto;
+import edu.bit.dto.StudentDto;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Administrator
  */
 public class PaymentManageView extends javax.swing.JFrame {
 
+    private PaymentController paymentController;
+    private double totalPayment = 0.0;;
+    private MainDashboardView mainDashboard;
     /**
      * Creates new form PaymentManageView
      */
     public PaymentManageView() {
         initComponents();
+        this.paymentController=new PaymentController();
+        loadPayments();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(mainDashboard);
     }
 
     /**
@@ -33,7 +52,7 @@ public class PaymentManageView extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnviewS = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnviewC = new javax.swing.JButton();
         txtstudentId = new javax.swing.JTextField();
         txtclassId = new javax.swing.JTextField();
         txtmonth = new javax.swing.JTextField();
@@ -44,17 +63,16 @@ public class PaymentManageView extends javax.swing.JFrame {
         btnsubmit = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblpayment = new javax.swing.JTable();
-        jLabel6 = new javax.swing.JLabel();
-        txtpaymentId = new javax.swing.JTextField();
         btncalculate = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         txtdate = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel1.setBackground(new java.awt.Color(0, 204, 204));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Payment Management");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -71,9 +89,19 @@ public class PaymentManageView extends javax.swing.JFrame {
 
         btnviewS.setBackground(new java.awt.Color(51, 255, 204));
         btnviewS.setText("View");
+        btnviewS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnviewSActionPerformed(evt);
+            }
+        });
 
-        jButton2.setBackground(new java.awt.Color(51, 255, 204));
-        jButton2.setText("View");
+        btnviewC.setBackground(new java.awt.Color(51, 255, 204));
+        btnviewC.setText("View");
+        btnviewC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnviewCActionPerformed(evt);
+            }
+        });
 
         txttotalPayment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,6 +118,11 @@ public class PaymentManageView extends javax.swing.JFrame {
         btnsubmit.setBackground(new java.awt.Color(255, 255, 51));
         btnsubmit.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnsubmit.setText("SUBMIT");
+        btnsubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsubmitActionPerformed(evt);
+            }
+        });
 
         tblpayment.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -112,17 +145,13 @@ public class PaymentManageView extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblpayment);
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setText("Payment ID");
-
-        txtpaymentId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtpaymentIdActionPerformed(evt);
-            }
-        });
-
         btncalculate.setBackground(new java.awt.Color(51, 255, 204));
         btncalculate.setText("Add");
+        btncalculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncalculateActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setText("Payment Date");
@@ -138,65 +167,61 @@ public class PaymentManageView extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(217, 217, 217)
-                                .addComponent(lblstudentName, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(203, 203, 203)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(217, 217, 217)
+                                        .addComponent(lblstudentName, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(203, 203, 203)
                                         .addComponent(lblsubject, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(54, 54, 54)
-                                        .addComponent(lblclassFee, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(btncalculate))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnviewS)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(48, 48, 48)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtpaymentId, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtstudentId, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtclassId, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtdate, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(22, 22, 22)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(txttotalPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtmonth, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnsubmit))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 824, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                                        .addComponent(lblclassFee, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnviewC)
+                                .addGap(18, 18, 18)
+                                .addComponent(btncalculate))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnviewS))
+                                .addGap(48, 48, 48)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtstudentId, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtclassId, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtdate, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(22, 22, 22)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(txttotalPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtmonth, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(65, 65, 65)
+                                .addComponent(btnsubmit)))))
+                .addContainerGap())
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(8, 8, 8)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtpaymentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(lblstudentName)
@@ -211,7 +236,7 @@ public class PaymentManageView extends javax.swing.JFrame {
                     .addComponent(lblclassFee))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(btnviewC)
                     .addComponent(btncalculate))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -221,36 +246,17 @@ public class PaymentManageView extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txttotalPayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(btnsubmit))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(txtdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnsubmit))
+                .addGap(27, 27, 27)
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -259,60 +265,98 @@ public class PaymentManageView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txttotalPaymentActionPerformed
 
-    private void txtpaymentIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtpaymentIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtpaymentIdActionPerformed
-
     private void txtdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdateActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtdateActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PaymentManageView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PaymentManageView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PaymentManageView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PaymentManageView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void btnviewSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnviewSActionPerformed
+        // TODO add your handling code here:
+        String studentId = txtstudentId.getText().trim();
+    if (studentId.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter Student ID.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    try {
+        StudentDto studentDetails = paymentController.findStudentNameById(studentId);
+        if (studentDetails != null) {
+            lblstudentName.setText(studentDetails.getName());
+        } else {
+            JOptionPane.showMessageDialog(this, "Student not found.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        //</editor-fold>
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error retrieving student details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnviewSActionPerformed
 
-        /* Create and display the form */
+    private void btnviewCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnviewCActionPerformed
+        // TODO add your handling code here:
+        String classId = txtclassId.getText().trim();
+    if (classId.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter Class ID.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    try {
+        ClassDto classDetails = paymentController.getClassDetails(classId);
+        if (classDetails != null) {
+            lblsubject.setText(classDetails.getSubject());
+            lblclassFee.setText(String.valueOf(classDetails.getClassFee()));
+        } else {
+            JOptionPane.showMessageDialog(this, "Class not found.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error retrieving class details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnviewCActionPerformed
+
+    private void btncalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncalculateActionPerformed
+        // TODO add your handling code here:
+        String classId = txtclassId.getText().trim();
+        if (classId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a Class ID.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            double classFee = paymentController.getClassFeeById(classId); // Get the class fee
+            totalPayment += classFee; // Add class fee to the accumulated total
+            txttotalPayment.setText(String.valueOf(totalPayment)); // Update the text field with the total
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error calculating total payment: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    // Implement submission logic if needed
+
+
+    public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new PaymentManageView().setVisible(true);
             }
         });
-    }
+    }//GEN-LAST:event_btncalculateActionPerformed
+
+    private void btnsubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsubmitActionPerformed
+        // TODO add your handling code here:
+        savePayment();
+    }//GEN-LAST:event_btnsubmitActionPerformed
+
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btncalculate;
     private javax.swing.JButton btnsubmit;
+    private javax.swing.JButton btnviewC;
     private javax.swing.JButton btnviewS;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -323,8 +367,135 @@ public class PaymentManageView extends javax.swing.JFrame {
     private javax.swing.JTextField txtclassId;
     private javax.swing.JTextField txtdate;
     private javax.swing.JTextField txtmonth;
-    private javax.swing.JTextField txtpaymentId;
     private javax.swing.JTextField txtstudentId;
     private javax.swing.JTextField txttotalPayment;
     // End of variables declaration//GEN-END:variables
+    private void savePayment(){
+        try {
+        // Collecting payment details from the form
+        
+        String studentId = txtstudentId.getText();  // Student ID
+        String classId = txtclassId.getText();  // Class ID
+        String month = txtmonth.getText();  // Month
+        String paymentDateString = txtdate.getText();  // Payment Date (String input)
+            BigDecimal totalPayment = new BigDecimal(txttotalPayment.getText());  // Total Payment (BigDecimal)
+
+        // Validate fields
+        if (paymentDateString == null || paymentDateString.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select a valid date.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Parse paymentDate string into Date object
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  // Change format as needed
+        Date paymentDate = null;
+        try {
+            paymentDate = sdf.parse(paymentDateString);  // Convert String to Date
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid date format. Please use yyyy-MM-dd.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate Student ID
+        if (!isStudentIdValid(studentId)) {
+            JOptionPane.showMessageDialog(this, "Student ID not found in database.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate Class ID
+        if (!isClassIdValid(classId)) {
+            JOptionPane.showMessageDialog(this, "Class ID not found in database.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Create a PaymentDto object and call the PaymentController to save the payment
+        PaymentDto paymentDto = new PaymentDto(0, studentId, classId, month, totalPayment, paymentDate);
+
+        // Ensure paymentController.savePayment(paymentDto) works properly
+        String result = paymentController.savePayment(paymentDto);
+        JOptionPane.showMessageDialog(this, result);
+
+        // Reload payment data into the table
+        loadPayments();
+        clearPaymentForm();  // Clear the form for the next entry
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error saving payment: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void loadPayments() {
+        try {
+            // Define the table columns
+            String[] columns = {"Payment ID", "Student ID", "Month", "Payment Date", "Total Payment"};
+        
+            // Create a DefaultTableModel with the columns
+            DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;  // Make the cells non-editable
+                }
+            };
+        
+            // Set the table model
+            tblpayment.setModel(dtm);
+        
+            // Retrieve all payment records from the controller
+            ArrayList<PaymentDto> paymentList = paymentController.getAllPayments();
+
+            // Check if the payment list is null, if so, initialize it as an empty list
+            if (paymentList == null) {
+                paymentList = new ArrayList<>();
+            }
+
+            // Populate the table with payment data
+            for (PaymentDto payment : paymentList) {
+                Object[] rowData = {
+                    payment.getPaymentId(),
+                    payment.getStudentId(),
+                    payment.getMonth(),
+                    payment.getPaymentDate(),
+                    payment.getTotalPayment()
+                };
+                dtm.addRow(rowData);  // Add row to the table model
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading payment data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+        private void clearPaymentForm() {
+        txtstudentId.setText("");  // Clear Student ID field
+        txtclassId.setText("");    // Clear Class ID field
+        txtdate.setText("");  // Clear Payment Date field
+        txttotalPayment.setText("");  // Clear Total Payment field
+        txtmonth.setText(""); 
+    }
+
+    private boolean isStudentIdValid(String studentId) {
+        try {
+            return paymentController.isStudentExists(studentId);  // Implement this in EnrollController
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean isClassIdValid(String classId) {
+        try {
+            return paymentController.isClassExists(classId);  // Implement this in EnrollController
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+
 }
+
+

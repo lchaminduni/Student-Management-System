@@ -12,10 +12,6 @@ import edu.bit.entity.ClassEntity;
 import edu.bit.service.user.ClassService;
 import java.util.ArrayList;
 
-/**
- *
- * @author Administrator
- */
 public class ClassServiceImpl implements ClassService{
     private ClassDao classDao=(ClassDao) DaoFactory.getInstance().getDao(DaoFactory.DaoTypes.CLASS);
 
@@ -57,8 +53,5 @@ public class ClassServiceImpl implements ClassService{
                     entity.getTeacherName(), entity.getClassFee(), entity.getDate(), entity.getTime()));
         }
         return classDtos;
-    }
-    
-    
-    
+    }  
 }

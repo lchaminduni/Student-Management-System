@@ -6,6 +6,7 @@ package edu.bit.dao;
 
 import edu.bit.dao.Impl.ClassDaoImpl;
 import edu.bit.dao.Impl.EnrollDaoImpl;
+import edu.bit.dao.Impl.PaymentDaoImpl;
 import edu.bit.dao.Impl.StudentDaoImpl;
 
 /**
@@ -36,6 +37,9 @@ public class DaoFactory {
                 
             case CLASS:
                 return new ClassDaoImpl();
+                
+            case PAYMENT:
+                return new PaymentDaoImpl();
             default:
                 return null;
         }
@@ -43,6 +47,6 @@ public class DaoFactory {
     }
     
     public enum DaoTypes{
-        STUDENT,ENROLLMENT,CLASS
+        STUDENT,ENROLLMENT,CLASS,PAYMENT
     }
 }
